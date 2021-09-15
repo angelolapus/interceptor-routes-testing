@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { UserService } from './user.service';
+import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,18 @@ import { UserService } from './user.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'interceptor-testing';
 
-  constructor(private userService: UserService){
+  isUserAuthenticated = false;
+  constructor(private userService: UserService, private authService: AuthService){
     this.getUser();
+
+    this.authService.isUserAuthenticated.subscribe((response:boolean) => {
+      this.isUserAuthenticated = response;
+    })
+  }
+
+  onAuthenticateUser(){
+    this.authService.authenticateUser();
   }
 
   getUser(){
